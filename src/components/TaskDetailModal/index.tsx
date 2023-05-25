@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { taskType } from "../customTypes/Task";
+import { taskType } from "../../customTypes/Task";
 import { Rate } from "antd";
+import "./TaskDetailModal.css";
 
 type ModalProps = {
   onClose: () => void;
@@ -54,7 +55,7 @@ function TaskDetailModal({ onClose, setTasks, task }: ModalProps) {
   return (
     <div
       id="authentication-modal"
-      className="mt-40 flex justify-center fixed z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
+      className="modalLayout flex items-center justify-center fixed z-50 w-full p-4 overflow-x-hidden overflow-y-auto inset-0 h-[calc(100%-1rem)] max-h-full"
     >
       <div className="relative w-full max-w-md max-h-full">
         <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">

@@ -27,8 +27,6 @@ function App() {
     }
   }, [filterValues, tasks]);
 
-  //task change, filterchange => luu vao localstorage + apply filter => render task
-
   return (
     <div
       style={{ height: "100vh", backgroundImage: `url(${backgroundImage})` }}
@@ -64,10 +62,7 @@ function App() {
                 document.body
               )}
             <div className="mt-5 mb-5 flex-1">
-              <MultipleSelect
-                // filterTaskStatus={filterTaskStatus}
-                setFilterValue={setFilterValue}
-              />
+              <MultipleSelect setFilterValue={setFilterValue} />
             </div>
           </div>
 

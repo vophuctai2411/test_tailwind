@@ -3,7 +3,6 @@ import { Select, Tag } from "antd";
 import type { CustomTagProps } from "rc-select/lib/BaseSelect";
 
 type MultipleSelectPropType = {
-  //filterTaskStatus: (statusArray: string[]) => void;
   setFilterValue: (statusArray: string[]) => void;
 };
 
