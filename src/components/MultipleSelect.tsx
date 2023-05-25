@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Select, Tag } from "antd";
 import type { CustomTagProps } from "rc-select/lib/BaseSelect";
 
 type MultipleSelectPropType = {
-  filterTaskStatus: (statusArray: string[]) => void;
+  //filterTaskStatus: (statusArray: string[]) => void;
+  setFilterValue: (statusArray: string[]) => void;
 };
 
 const options = [
-  { value: "true", label: "done", color: "green" },
+  { value: "true", label: "done", color: "gray" },
   { value: "false", label: "in progress", color: "cyan" },
 ];
 
@@ -31,15 +32,27 @@ const tagRender = (props: CustomTagProps) => {
   );
 };
 
-const MultipleSelect = ({ filterTaskStatus }: MultipleSelectPropType) => (
-  <Select
-    mode="multiple"
-    showArrow
-    tagRender={tagRender}
-    style={{ width: "100%" }}
-    options={options}
-    onChange={(value) => filterTaskStatus(value)}
-  />
-);
+const MultipleSelect = ({
+  // filterTaskStatus,
+  setFilterValue,
+}: MultipleSelectPropType) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <Select
+      mode="multiple"
+      showArrow
+      tagRender={tagRender}
+      style={{ width: "100%" }}
+      options={options}
+      onChange={(value) => {
+        //filterTaskStatus(value);
+        setFilterValue(value);
+        setOpen(false);
+      }}
+      open={open}
+      onDropdownVisibleChange={(visible) => setOpen(visible)}
+    />
+  );
+};
 
 export default MultipleSelect;

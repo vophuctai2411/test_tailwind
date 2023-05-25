@@ -41,14 +41,11 @@ function TaskDetailModal({ onClose, setTasks, task }: ModalProps) {
           id: Math.random().toString(),
           title,
           description,
+          priority,
           done: false,
-          priority: 0,
         };
 
-        setTasks((previousTasks) => {
-          const newList = [newTask, ...previousTasks];
-          return newList;
-        });
+        setTasks((previousTasks) => [newTask, ...previousTasks]);
       }
       onClose();
     }

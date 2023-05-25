@@ -37,7 +37,18 @@
   }
 }
 
+.Background_Image{
+  width: 100%;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: auto;
+}
 
 .anticon svg {
   display: flex;
+}
+
+.ant-select-selector{
+  height: 40px;
 }

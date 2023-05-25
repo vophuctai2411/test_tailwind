@@ -1,112 +1,51 @@
 import "./App.css";
-import TaskList from "./components/TaksList";
+import TaskList from "./components/TaskList";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import TaskDetailModal from "./components/TaskDetailModal";
 import { taskType } from "./customTypes/Task";
 import MultipleSelect from "./components/MultipleSelect";
+import backgroundImage from "./assets/Mountains.svg";
 
 function App() {
   const [showModal, setShowModal] = useState(false);
-  // const tempTask: taskType[] = [
-  //   {
-  //     id: Math.random().toString(),
-  //     title: "task1",
-  //     description: "description 1",
-  //     priority: 0,
-  //     done: true,
-  //   },
-  //   {
-  //     id: Math.random().toString(),
-  //     title: "task2",
-  //     description: "description 1",
-  //     priority: 0,
-  //     done: false,
-  //   },
-  //   {
-  //     id: Math.random().toString(),
-  //     title: "task1",
-  //     description: "description 1",
-  //     priority: 0,
-  //     done: false,
-  //   },
-  //   {
-  //     id: Math.random().toString(),
-  //     title: "task1",
-  //     description: "description 1",
-  //     priority: 0,
-  //     done: true,
-  //   },
-  //   {
-  //     id: Math.random().toString(),
-  //     title: "task1",
-  //     description: "description 1",
-  //     priority: 0,
-  //     done: true,
-  //   },
-  //   {
-  //     id: Math.random().toString(),
-  //     title: "task1",
-  //     description: "description 1",
-  //     priority: 0,
-  //     done: true,
-  //   },
-  //   {
-  //     id: Math.random().toString(),
-  //     title: "task1",
-  //     description: "description 1",
-  //     priority: 0,
-  //     done: true,
-  //   },
-  //   {
-  //     id: Math.random().toString(),
-  //     title: "task1",
-  //     description: "description 1",
-  //     priority: 0,
-  //     done: true,
-  //   },
-  //   {
-  //     id: Math.random().toString(),
-  //     title: "task1",
-  //     description: "description 1",
-  //     priority: 0,
-  //     done: true,
-  //   },
-  // ];
-
-  const tempTask: taskType[] = JSON.parse(
-    localStorage.getItem("todoList") || ""
+  const [filterValues, setFilterValue] = useState<string[]>([]);
+  const [tasks, setTasks] = useState<taskType[]>(
+    JSON.parse(localStorage.getItem("todoList") || JSON.stringify([]))
   );
-  const [tasks, setTasks] = useState(tempTask);
-  const preventStorage = useRef(false);
 
-  const filterTaskStatus = (statusArray: string[]) => {
-    preventStorage.current = true;
-    if (statusArray.length == 0) setTasks(tempTask); // localstorage.get
-    else {
-      const taskFiltered = tempTask.filter((item) =>
-        statusArray.includes(item.done.toString())
-      );
-      setTasks(taskFiltered);
-    }
-  };
+  const [taskApplyFilter, setTaskApplyFilter] = useState<taskType[]>([]);
 
   useEffect(() => {
-    if (preventStorage.current) {
-      preventStorage.current = false;
-      return;
-    }
     localStorage.setItem("todoList", JSON.stringify(tasks));
-  }, [tasks]);
+    if (filterValues.length == 0) setTaskApplyFilter(tasks);
+    else {
+      const taskFiltered = tasks.filter((item) =>
+        filterValues.includes(item.done.toString())
+      );
+      setTaskApplyFilter(taskFiltered);
+    }
+  }, [filterValues, tasks]);
+
+  //task change, filterchange => luu vao localstorage + apply filter => render task
 
   return (
-    <>
-      <div className="rounded-t-lg h-[20rem] flex justify-center bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% ">
-        <div className="mt-20">
-          <div className="flex justify-between">
-            <h1 className="inline-flex items-center text-base font-semibold text-stone-300">
+    <div
+      style={{ height: "100vh", backgroundImage: `url(${backgroundImage})` }}
+      className="Background_Image"
+    >
+      <div className="h-[20rem] flex justify-center ">
+        <div className="m-10 mt-20">
+          <div className="flex mb-10">
+            <h1
+              className="inline-flex items-center text-base font-extrabold text-[#063970] opacity-75"
+              style={{ fontSize: 30 }}
+            >
               TO DO LIST
             </h1>
+          </div>
+
+          <div className="inline-flex items-center gap-5 w-80">
             <button
               data-modal-target="authentication-modal"
               data-modal-toggle="authentication-modal"
@@ -124,16 +63,18 @@ function App() {
                 />,
                 document.body
               )}
+            <div className="mt-5 mb-5 flex-1">
+              <MultipleSelect
+                // filterTaskStatus={filterTaskStatus}
+                setFilterValue={setFilterValue}
+              />
+            </div>
           </div>
 
-          <div className="mt-5 mb-5 w-48">
-            <MultipleSelect filterTaskStatus={filterTaskStatus} />
-          </div>
-
-          <TaskList tasks={tasks} setTasks={setTasks} />
+          <TaskList tasks={taskApplyFilter} setTasks={setTasks} />
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
