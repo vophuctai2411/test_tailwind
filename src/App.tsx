@@ -58,6 +58,7 @@ function App() {
                 <TaskDetailModal
                   onClose={() => setShowModal(false)}
                   setTasks={setTasks}
+                  allTasks={tasks}
                 />,
                 document.body
               )}

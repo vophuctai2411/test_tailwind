@@ -1,17 +1,26 @@
 import { useState } from "react";
 import { taskType } from "../../customTypes/Task";
-import { Rate } from "antd";
+import { Rate, notification } from "antd";
 import "./TaskDetailModal.css";
 
 type ModalProps = {
   onClose: () => void;
   setTasks?: React.Dispatch<React.SetStateAction<taskType[]>>;
   task?: taskType;
+  allTasks: taskType[];
 };
 
-function TaskDetailModal({ onClose, setTasks, task }: ModalProps) {
+function TaskDetailModal({ onClose, setTasks, task, allTasks }: ModalProps) {
   const isEdit = task?.id;
   const [priority, setPriority] = useState(isEdit ? task?.priority : 0);
+
+  const checkDuplicateTask = (newTask: taskType) => {
+    return (
+      allTasks.findIndex(
+        (i) => i.title == newTask.title && i.id != newTask.id
+      ) != -1
+    );
+  };
 
   const submitFormAction = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,6 +39,15 @@ function TaskDetailModal({ onClose, setTasks, task }: ModalProps) {
           priority,
         };
 
+        if (checkDuplicateTask(itemAfterChange)) {
+          notification.error({
+            message: `Task title already exists`,
+            style: { backgroundColor: "#ffe6e6" },
+            duration: 3,
+          });
+          return;
+        }
+
         setTasks((previousItem) => {
           const replaceItems = previousItem.map((obj) => {
             if (itemAfterChange.id == obj.id) return itemAfterChange;
@@ -46,8 +64,24 @@ function TaskDetailModal({ onClose, setTasks, task }: ModalProps) {
           done: false,
         };
 
+        if (checkDuplicateTask(newTask)) {
+          notification.error({
+            message: `Task title already exists`,
+            style: { backgroundColor: "#ffe6e6" },
+            duration: 3,
+          });
+          return;
+        }
+
         setTasks((previousTasks) => [newTask, ...previousTasks]);
       }
+
+      notification.success({
+        message: `${isEdit ? "Update" : "Create"} successfully`,
+        style: { backgroundColor: "#e6ffe6" },
+        duration: 3,
+      });
+
       onClose();
     }
   };
