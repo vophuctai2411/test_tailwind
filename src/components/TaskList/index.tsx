@@ -88,7 +88,7 @@ function TaskList({ tasks, setTasks }: taskListProps) {
 
   return (
     <>
-      <div className="flex flex-wrap gap-5">{taskElement}</div>
+      <div className="flex flex-wrap gap-5 justify-center ">{taskElement}</div>
       {typeof itemWillBeEditted != "boolean" &&
         createPortal(
           <TaskDetailModal
