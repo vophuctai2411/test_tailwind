@@ -44,7 +44,7 @@ function TaskList({ tasks, setTasks }: taskListProps) {
   const taskElement = tasks.map((item) => {
     return (
       <div
-        className={`w-full max-w-sm p-4 border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700 mb-5  ${
+        className={`w-full max-w-sm p-4 border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700 mb-5 hover:shadow-2xl ${
           item.done ? "grayscale bg-slate-200" : "bg-white"
         } `}
         key={Math.random()}
