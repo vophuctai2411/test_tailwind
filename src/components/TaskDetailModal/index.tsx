@@ -115,7 +115,7 @@ function TaskDetailModal({ onClose, setTasks, task, allTasks }: ModalProps) {
             <span className="sr-only">Close modal</span>
           </button>
           <div className="px-6 py-6 lg:px-8">
-            <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
+            <h3 className="mb-4 text-xl font-bold text-[#063970] opacity-75">
               {isEdit ? "Edit" : "Create"} new Task
             </h3>
             <form
