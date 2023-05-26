@@ -6,12 +6,13 @@ import TaskDetailModal from "./components/TaskDetailModal";
 import { taskType } from "./customTypes/Task";
 import MultipleSelect from "./components/MultipleSelect";
 import backgroundImage from "./assets/Mountains.svg";
+import { mockData } from "./assets/mockData";
 
 function App() {
   const [showModal, setShowModal] = useState(false);
   const [filterValues, setFilterValue] = useState<string[]>([]);
   const [tasks, setTasks] = useState<taskType[]>(
-    JSON.parse(localStorage.getItem("todoList") || JSON.stringify([]))
+    JSON.parse(localStorage.getItem("todoList") || JSON.stringify(mockData))
   );
 
   const [taskApplyFilter, setTaskApplyFilter] = useState<taskType[]>([]);
