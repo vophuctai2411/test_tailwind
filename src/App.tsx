@@ -1,32 +1,49 @@
 import "./App.css";
 import TaskList from "./components/TaskList";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import TaskDetailModal from "./components/TaskDetailModal";
 import { taskType } from "./customTypes/Task";
 import MultipleSelect from "./components/MultipleSelect";
 import backgroundImage from "./assets/Mountains.svg";
 import { mockData } from "./assets/mockData";
+import { Input } from "antd";
 
 function App() {
   const [showModal, setShowModal] = useState(false);
   const [filterValues, setFilterValue] = useState<string[]>([]);
+  const [searchValue, setSearchValue] = useState<string>("");
   const [tasks, setTasks] = useState<taskType[]>(
     JSON.parse(localStorage.getItem("todoList") || JSON.stringify(mockData))
   );
 
-  const [taskApplyFilter, setTaskApplyFilter] = useState<taskType[]>([]);
+  const [showTasks, setShowTasks] = useState<taskType[]>([]);
 
   useEffect(() => {
     localStorage.setItem("todoList", JSON.stringify(tasks));
-    if (filterValues.length == 0) setTaskApplyFilter(tasks);
-    else {
-      const taskFiltered = tasks.filter((item) =>
+
+    //filter
+    let filteredData = tasks;
+    if (filterValues.length > 0) {
+      const tempData = tasks.filter((item) =>
         filterValues.includes(item.done.toString())
       );
-      setTaskApplyFilter(taskFiltered);
+      filteredData = tempData;
     }
-  }, [filterValues, tasks]);
+
+    //search
+    let searchedData = filteredData;
+    if (searchValue?.length > 0) {
+      const tempData = filteredData.filter(
+        (item) =>
+          item.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.description.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      searchedData = tempData;
+    }
+
+    setShowTasks(searchedData);
+  }, [filterValues, tasks, searchValue]);
 
   return (
     <div
@@ -45,7 +62,7 @@ function App() {
           </div>
 
           <div className="flex justify-center">
-            <div className="inline-flex items-center gap-5 w-80">
+            <div className="flex items-center gap-5 flex-wrap mb-5">
               <button
                 data-modal-target="authentication-modal"
                 data-modal-toggle="authentication-modal"
@@ -64,13 +81,21 @@ function App() {
                   />,
                   document.body
                 )}
-              <div className="mt-5 mb-5 flex-1">
+              <div style={{ minWidth: 180 }}>
                 <MultipleSelect setFilterValue={setFilterValue} />
+              </div>
+
+              <div>
+                <Input
+                  placeholder="Input search text"
+                  style={{ height: 40 }}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                />
               </div>
             </div>
           </div>
 
-          <TaskList tasks={taskApplyFilter} setTasks={setTasks} />
+          <TaskList tasks={showTasks} setTasks={setTasks} />
         </div>
       </div>
     </div>
